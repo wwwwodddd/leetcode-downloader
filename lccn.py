@@ -7,7 +7,7 @@ import getpass
 
 requests.packages.urllib3.disable_warnings() # avoid warning
 
-leetcodecn_address = 'https://leetcode-cn.com/'
+leetcodecn_address = 'https://leetcode.cn/'
 login_adress = leetcodecn_address + 'accounts/login/'
 submissions_url = leetcodecn_address + 'submissions/'
 lang2extension = {'cpp': 'cpp', 'python3': 'py'}
@@ -26,6 +26,7 @@ def login():
     return client
 
 def download_submission(submission_id, client):
+    print('download_submission', submission_id)
     headers = {
         'Connection': 'keep-alive',
         'Content-Type': 'application/json',
@@ -36,7 +37,7 @@ def download_submission(submission_id, client):
             }
 
     time.sleep(1)
-    response = client.post("https://leetcode-cn.com/graphql/", data=json.dumps(para), headers=headers)
+    response = client.post(leetcodecn_address + 'graphql/', data=json.dumps(para), headers=headers)
     result = response.json()
     return result
 
@@ -48,7 +49,7 @@ def main():
     os.makedirs('Accepted', exist_ok=True)
     while True:
         print("offset", offset)
-        submissions_url = "https://leetcode-cn.com/api/submissions/?offset=" + str(offset) + "&limit=20&lastkey="
+        submissions_url = leetcodecn_address + 'api/submissions/?offset=' + str(offset) + "&limit=20&lastkey="
         response = client.get(submissions_url, verify=False)
         result = response.json()
         if 'submissions_dump' not in result:
